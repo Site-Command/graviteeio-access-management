@@ -1,0 +1,13 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:io:gravitee:am:reporter:file:FileReporterConfiguration",
+  "properties" : {
+    "filename": {
+      "type": "string",
+      "title": "Filename",
+      "pattern": "^([A-Za-z0-9][A-Za-z0-9\\-_.]*)$",
+      "description": "Filename where the information are written. If the name contains the pattern 'yyyy_mm_dd', it will be replace by the current date and a new file will be created every day at midnight."
+    }
+  },
+  "required" : ["filename"]
+}

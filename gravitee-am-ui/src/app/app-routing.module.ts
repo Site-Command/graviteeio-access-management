@@ -171,6 +171,7 @@ import {IdentitiesResolver} from './resolvers/identities.resolver';
 import {PluginPoliciesResolver} from './resolvers/plugin-policies.resolver';
 import {PlatformFlowSchemaResolver} from './resolvers/platform-flow-schema.resolver';
 import {ApplicationAnalyticsComponent} from "./domain/applications/application/analytics/analytics.component";
+import { PluginReportersResolver } from './resolvers/plugin-reporters.resolver';
 
 const routes: Routes = [
   {
@@ -1119,10 +1120,24 @@ const routes: Routes = [
               }
             }
           },
+          { path: 'audits/settings/new',
+            component: ReporterComponent,
+            canActivate: [AuthGuard],
+            resolve: {
+              reporters: ReportersResolver,
+              reporterPlugins: PluginReportersResolver
+            },
+            data: {
+              perms: {
+                only: ['domain_reporter_create']
+              }
+            }
+          },
           { path: 'audits/settings/:reporterId',
             component: ReporterComponent,
             resolve: {
-              reporter: ReporterResolver
+              reporter: ReporterResolver,
+              reporterPlugins: PluginReportersResolver
             },
             data: {
               perms: {

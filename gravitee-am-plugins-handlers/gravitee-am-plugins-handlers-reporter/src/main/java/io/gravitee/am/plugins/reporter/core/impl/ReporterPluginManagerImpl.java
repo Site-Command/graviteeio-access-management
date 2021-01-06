@@ -20,6 +20,7 @@ import io.gravitee.am.plugins.reporter.core.ReporterDefinition;
 import io.gravitee.am.plugins.reporter.core.ReporterPluginManager;
 import io.gravitee.am.reporter.api.Reporter;
 import io.gravitee.am.reporter.api.ReporterConfiguration;
+import io.gravitee.common.service.AbstractService;
 import io.gravitee.plugin.core.api.Plugin;
 import io.gravitee.plugin.core.api.PluginContextFactory;
 import io.gravitee.plugin.core.internal.AnnotationBasedPluginContextConfigurer;
@@ -142,8 +143,10 @@ public class ReporterPluginManagerImpl implements ReporterPluginManager {
                 }
             });
 
+            if (auditReporterObj instanceof AbstractService) {
+                ((AbstractService<?>) auditReporterObj).setApplicationContext(reporterApplicationContext);
+            }
             reporterApplicationContext.getAutowireCapableBeanFactory().autowireBean(auditReporterObj);
-
             if (auditReporterObj instanceof InitializingBean) {
                 ((InitializingBean) auditReporterObj).afterPropertiesSet();
             }

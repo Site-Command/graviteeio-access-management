@@ -211,13 +211,7 @@ public class AuditReporterManagerImpl extends AbstractService<AuditReporterManag
     }
 
     private Reporter doGetReporter(String domain, long startTime) {
-        Optional<Reporter> optionalReporter = auditReporters
-                .entrySet()
-                .stream()
-                .filter(entry -> domain.equals(entry.getKey().getDomain()))
-                .map(entry -> entry.getValue())
-                .findFirst();
-
+        Optional<Reporter> optionalReporter = doGetReporter0(domain);
         if (optionalReporter.isPresent()) {
             return optionalReporter.get();
         }
@@ -251,6 +245,7 @@ public class AuditReporterManagerImpl extends AbstractService<AuditReporterManag
                 .stream()
                 .filter(entry -> domain.equals(entry.getKey().getDomain()))
                 .map(entry -> entry.getValue())
+                .filter(reporter -> reporter.handlesSearch() )
                 .findFirst();
     }
 
