@@ -170,3 +170,8 @@ db.webauthn_credentials.createIndex( { "referenceType" : 1, "referenceId": 1 } )
 db.webauthn_credentials.createIndex( { "referenceType" : 1, "referenceId": 1, "username": 1 } );
 db.webauthn_credentials.createIndex( { "referenceType" : 1, "referenceId": 1, "credentialId": 1 } );
 db.webauthn_credentials.reIndex();
+
+
+db.authentication_contexts.dropIndexes();
+db.authentication_contexts.createIndex({ "sessionId" : 1, "version": -1 });
+db.authentication_contexts.reIndex();

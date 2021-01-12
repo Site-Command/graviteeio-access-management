@@ -15,6 +15,9 @@
  */
 package io.gravitee.am.gateway.handler.context;
 
+import io.gravitee.am.model.AuthenticationFlowContext;
+
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -25,11 +28,23 @@ public class EvaluableExecutionContext {
 
     private final ReactableExecutionContext executionContext;
 
+    private final AuthenticationFlowContext authFlowContext;
+
     EvaluableExecutionContext(ReactableExecutionContext executionContext) {
         this.executionContext = executionContext;
+        GraviteeContext graviteeContext = (GraviteeContext)this.executionContext.getAttribute(GraviteeContext.ROUTING_CONTEXT_FIELD_NAME);
+        if (graviteeContext != null && graviteeContext.getAuthenticationFlowContext() != null) {
+            this.authFlowContext = graviteeContext.getAuthenticationFlowContext();
+        } else {
+            this.authFlowContext = new AuthenticationFlowContext();
+        }
     }
 
     public Map<String, Object> getAttributes() {
-        return executionContext.getAttributes();
+        // Create a Map using context attributes and authentication flow context information
+        // this is to always have an up to date list of attributes if a policy add some entries
+        Map<String, Object> attributes = new HashMap<>(this.executionContext.getAttributes());
+        attributes.putAll(this.authFlowContext.getData());
+        return attributes;
     }
 }

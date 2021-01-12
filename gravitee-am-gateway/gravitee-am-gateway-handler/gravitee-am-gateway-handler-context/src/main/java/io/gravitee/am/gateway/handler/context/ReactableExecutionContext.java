@@ -116,7 +116,6 @@ public class ReactableExecutionContext implements MutableExecutionContext {
             templateContext.setVariable(TEMPLATE_ATTRIBUTE_REQUEST, new EvaluableRequest(request()));
             templateContext.setVariable(TEMPLATE_ATTRIBUTE_RESPONSE, new EvaluableResponse(response()));
             templateContext.setVariable(TEMPLATE_ATTRIBUTE_CONTEXT, new EvaluableExecutionContext(this));
-
             if (providers != null) {
                 providers.forEach(templateVariableProvider -> templateVariableProvider.provide(templateContext));
             }

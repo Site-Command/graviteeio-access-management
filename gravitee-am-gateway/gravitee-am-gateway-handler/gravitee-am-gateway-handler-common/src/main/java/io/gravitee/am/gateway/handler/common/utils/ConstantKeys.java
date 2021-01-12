@@ -50,6 +50,7 @@ public interface ConstantKeys {
     String LOGIN_ACTION_KEY = "loginAction";
     String SKIP_ACTION_KEY = "skipAction";
     String TRANSACTION_ID_KEY = "tid";
+    String AUTH_FLOW_CONTEXT_VERSION = "ver";
 
     // MFA keys.
     String MFA_SKIPPED_KEY = "mfaEnrollmentSkipped";

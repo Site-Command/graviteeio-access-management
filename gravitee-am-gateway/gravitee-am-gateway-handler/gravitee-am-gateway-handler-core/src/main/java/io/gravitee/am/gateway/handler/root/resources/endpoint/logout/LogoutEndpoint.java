@@ -15,10 +15,12 @@
  */
 package io.gravitee.am.gateway.handler.root.resources.endpoint.logout;
 
+import io.gravitee.am.gateway.handler.common.utils.ConstantKeys;
 import io.gravitee.am.gateway.handler.common.vertx.utils.RequestUtils;
 import io.gravitee.am.model.Domain;
 import io.gravitee.am.model.User;
 import io.gravitee.am.service.AuditService;
+import io.gravitee.am.service.AuthenticationFlowContextService;
 import io.gravitee.am.service.TokenService;
 import io.gravitee.am.service.reporter.builder.AuditBuilder;
 import io.gravitee.am.service.reporter.builder.LogoutAuditBuilder;
@@ -44,11 +46,13 @@ public class LogoutEndpoint implements Handler<RoutingContext> {
     private Domain domain;
     private TokenService tokenService;
     private AuditService auditService;
+    private AuthenticationFlowContextService authenticationFlowContextService;
 
-    public LogoutEndpoint(Domain domain, TokenService tokenService, AuditService auditService) {
+    public LogoutEndpoint(Domain domain, TokenService tokenService, AuditService auditService, AuthenticationFlowContextService authenticationFlowContextService) {
         this.domain = domain;
         this.tokenService = tokenService;
         this.auditService = auditService;
+        this.authenticationFlowContextService = authenticationFlowContextService;
     }
 
     @Override
@@ -81,6 +85,11 @@ public class LogoutEndpoint implements Handler<RoutingContext> {
         }
 
         if (routingContext.session() != null) {
+            // clear AuthenticationFlowContext. data of this context have a TTL so we can fire and forget in case on error.
+            authenticationFlowContextService.clearContext(routingContext.session().get(ConstantKeys.TRANSACTION_ID_KEY))
+                    .doOnError((error) -> LOGGER.info("Deletion of some session data fails '{}'", error.getMessage()))
+                    .subscribe();
+
             routingContext.session().destroy();
         }
 

@@ -1,0 +1,37 @@
+= Enrich Authentication Flow Profile
+
+== Description
+
+You can use the `enrich-auth-flow` policy to persist some information between the authentication steps.
+These data will be automatically loaded into the execution context attributes.
+
+== Configuration
+
+|===
+|Property |Required |Description |Type |Default
+
+.^|properties
+^.^|Yes
+|The information to get from the execution context
+^.^|List of properties
+^.^|-
+
+.^|duration
+^.^|Yes
+|Time to  live of the saved data
+^.^|boolean
+^.^|5
+
+.^|timeUnit
+^.^|Yes
+|Time Unit of the duration value (MINUTES or SECONDS)
+^.^|boolean
+^.^|MINUTES
+
+.^|exitOnError
+^.^|No
+|Terminate the request if there are an error
+^.^|boolean
+^.^|false
+
+|===

@@ -108,6 +108,7 @@ public abstract class AbstractJdbcTest {
             tables.add("organizations");
             tables.add("organization_identities");
             tables.add("organization_domain_restrictions");
+            tables.add("authentication_contexts");
 
             Connection connection = Flowable.fromPublisher(cnxFact.create()).blockingFirst();
             connection.beginTransaction();

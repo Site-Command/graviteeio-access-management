@@ -1,0 +1,50 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:io:gravitee:policy:am:enrich:auth:EnrichAuthFlowPolicyConfiguration",
+  "properties" : {
+      "properties" : {
+      "type" : "array",
+      "title": "Context properties",
+      "items" : {
+        "type" : "object",
+        "id" : "urn:jsonschema:io:gravitee:policy:am:enrich:auth:configuration:Property",
+        "title": "Property",
+        "properties" : {
+          "key" : {
+            "title": "Key",
+            "type" : "string"
+          },
+          "value" : {
+            "title": "Value (Support EL)",
+            "type" : "string"
+          }
+        }
+      },
+      "required": [
+        "key",
+        "value"
+      ]
+    },
+    "duration" : {
+      "type": "long",
+      "title": "Time to  live of the saved data",
+      "default": 5
+    },
+    "timeUnit" : {
+      "type": "string",
+      "title": "Time Unit of the duration value",
+      "enum" : ["SECONDS", "MINUTES"],
+      "default": "MINUTES"
+    },
+    "exitOnError": {
+      "title": "Exit on error",
+      "description": "Terminate the request if properties can't be saved",
+      "type" : "boolean",
+      "default": false
+    }
+  },"required": [
+      "properties",
+      "duration",
+      "timeUnit"
+  ]
+}

@@ -21,9 +21,11 @@ import io.gravitee.am.gateway.handler.common.utils.ConstantKeys;
 import io.gravitee.am.gateway.handler.common.vertx.core.http.VertxHttpServerRequest;
 import io.gravitee.am.gateway.handler.common.vertx.core.http.VertxHttpServerResponse;
 import io.gravitee.am.gateway.handler.context.ExecutionContextFactory;
+import io.gravitee.am.gateway.handler.context.GraviteeContext;
 import io.gravitee.am.gateway.policy.Policy;
 import io.gravitee.am.gateway.policy.PolicyChainException;
 import io.gravitee.am.gateway.policy.PolicyChainProcessorFactory;
+import io.gravitee.am.model.AuthenticationFlowContext;
 import io.gravitee.gateway.api.ExecutionContext;
 import io.gravitee.gateway.api.Request;
 import io.gravitee.gateway.api.Response;
@@ -109,7 +111,16 @@ public class PolicyChainHandlerImpl implements Handler<RoutingContext> {
                     }
                     // update context attributes
                     ExecutionContext executionContext = policyChainHandler.result();
-                    executionContext.getAttributes().forEach((k, v) -> context.put(k, v));
+                    executionContext.getAttributes().forEach((k, v) -> {
+                        if (GraviteeContext.ROUTING_CONTEXT_FIELD_NAME.equals(k)) {
+                            final AuthenticationFlowContext authFlowContext = ((GraviteeContext) v).getAuthenticationFlowContext();
+                            if (authFlowContext != null) {
+                                // update authentication flow context version into the session
+                                context.session().put(ConstantKeys.AUTH_FLOW_CONTEXT_VERSION, authFlowContext.getVersion());
+                            }
+                        }
+                        context.put(k, v);
+                    });
                     // continue
                     context.next();
                 });
